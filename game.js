@@ -13,7 +13,7 @@ class GrimoireEngine {
         // Automatically switch between Local and Production APIs
         this.apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://127.0.0.1:5000' 
-            : 'https://your-backend-name.onrender.com'; // We will get this URL in Phase 2
+            : 'https://grimoire-toi2.onrender.com'; // We will get this URL in Phase 2
 
         this.runMetrics = {};
         this.activeTimerInterval = null;
