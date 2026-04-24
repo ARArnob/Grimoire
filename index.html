@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grimoire: The Algorithmic Abyss</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <body>
+    <div id="app-wrapper">
+        
+        <div id="left-sidebar">
+            <div class="panel telemetry">
+                <h3>Game Settings</h3>
+                <div id="menu-bar">
+                    <label for="level-select">Level:</label>
+                    <select id="level-select">
+                        <option value="level1" selected>Level 1</option>
+                        <option value="level2">Level 2</option>
+                        <option value="level3">Level 3</option>
+                        <option value="level4">Level 4</option>
+                        <option value="level5">Level 5</option>
+                    </select>
+
+                    <label for="difficulty-select">Difficulty:</label>
+                    <select id="difficulty-select">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                    
+                    <button id="quick-restart-btn" class="action-btn">Restart Matrix</button>
+                    
+                    <div id="hud-hp-container" style="margin-top: 15px; font-weight: bold; color: #ef4444;">
+                        Vitality: <span id="hud-hp">3/3</span>
+                    </div>
+                    <div id="hud-timer-container" style="margin-top: 15px; font-weight: bold; color: #facc15;">
+                        Time: <span id="hud-timer">00:00.0</span>
+                    </div>
+                    <div id="hud-radar-container" style="margin-top: 15px; font-weight: bold; color: #a1a1aa;">
+                        Threat Radar: <span id="hud-radar">CLEAR (0.0%)</span>
+                    </div>
+                    <div id="hud-stasis-container" style="margin-top: 15px; font-weight: bold; color: #3b82f6;">
+                        Stasis Charges: <span id="hud-stasis">0</span> [Press 'E']
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="center-column">
+            <div id="board-wrapper">
+                <div id="game-board"></div>
+                <div id="entity-layer">
+                    <div id="player-token" class="player"></div>
+                    <div id="hunter-token" class="target"></div>
+                    <div id="goal-token" class="goal"></div>
+                    <div id="grunt-token" class="grunt"></div>
+                    <div id="stalker-token" class="stalker"></div>
+                    <div id="sentinel-token" class="sentinel"></div>
+                    <div id="stasis-token" class="stasis"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="right-sidebar">
+            <div class="panel">
+                <h1 style="margin-top: 0;">GRIMOIRE</h1>
+                <p class="subtitle">The Algorithmic Abyss</p>
+                <p class="controls">Controls: WASD / Arrows</p>
+                <p class="lore-tip">[APEX TIP]: Stasis halts event loops. Kinetic hazards remain lethal. Ramming frozen entities drains Vitality.</p>
+                <button id="open-codex-btn" class="action-btn" style="margin-top: 15px; border-color: #06b6d4; color: #06b6d4;">Access Matrix Codex</button>
+            </div>
+
+            <div id="abyss-ledger" class="hidden">
+                <h3 style="color: #facc15; margin-top: 0; border-bottom: 1px solid #3f3f46; padding-bottom: 10px;">Abyss Log</h3>
+                <ul id="ledger-list" style="list-style-type: none; padding: 0; margin: 0; font-family: monospace; font-size: 1.1em; color: #a1a1aa;">
+                </ul>
+                <hr style="border-color: #3f3f46; margin: 15px 0;">
+                <div style="color: #06b6d4; font-weight: bold; font-family: monospace; font-size: 1.2em;">
+                    RUN TOTAL: <span id="ledger-total">00:00.0</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="gateway-modal" class="hidden">
+        <div id="gateway-box">
+            <h2>CRYPTOGRAPHIC LOCK</h2>
+            <p id="gateway-subtitle">Constraint Satisfaction Required</p>
+            
+            <div id="gateway-tip">
+                <span style="color: #06b6d4; font-weight: bold;">[OBJECTIVE]:</span> 
+                Deploy <span id="n-count" style="color: #facc15;">N</span> Queens. 
+                No two entities may share the same row, column, or diagonal trajectory.
+            </div>
+
+            <div id="puzzle-grid"></div>
+            <div class="gateway-controls">
+                <button id="run-algo-btn">Execute Backtracking</button>
+                <button id="enter-floor-btn" class="hidden">Descend Deeper</button>
+                <button id="retreat-gateway-btn" style="border-color: #ef4444; color: #ef4444; margin-left: 10px;">Tactical Retreat</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="game-over-modal" class="hidden">
+        <div id="game-over-box">
+            <h2>GAME OVER</h2>
+            <p id="game-over-message"></p>
+            
+            <div id="run-metrics" style="margin: 15px 0; text-align: left; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px; display: none;">
+                <ul id="level-times-list" style="list-style-type: none; padding: 0; margin: 0; font-family: monospace; color: #a1a1aa;"></ul>
+                <hr style="border-color: #3f3f46; margin: 10px 0;">
+                <div id="total-time-display" style="color: #06b6d4; font-weight: bold; font-family: monospace;"></div>
+            </div>
+
+            <button id="restart-button">Restart</button>
+        </div>
+    </div>
+   <div id="codex-modal" class="hidden">
+        <div id="codex-box">
+            <h2>MATRIX CODEX</h2>
+            <p style="color: #9ca3af; font-size: 0.9em; margin-bottom: 20px;">Threat Classification & Engagement Rules</p>
+            
+            <div class="codex-grid">
+                <div class="codex-entry">
+                    <div class="player" style="position: relative; margin: 0 auto;"></div>
+                    <h4>The Operator (You)</h4>
+                    <p>Navigate the grid, evade lethal entities, and slice the cryptographic gateways to descend deeper into the Abyss.</p>
+                </div>
+                <div class="codex-entry">
+                    <div class="target" style="position: relative; margin: 0 auto; clip-path: polygon(50% 0%, 100% 100%, 50% 80%, 0% 100%);"></div>
+                    <h4 style="color: #ef4444;">Apex Hunter</h4>
+                    <p>Relentless pursuit. Always calculates the fastest intercept route. <br><b>Threat Level:</b> Lethal on contact.</p>
+                </div>
+                <div class="codex-entry">
+                    <div class="grunt" style="position: relative; margin: 0 auto;"></div>
+                    <h4 style="color: #22c55e;">The Swarm</h4>
+                    <p>Hunts in coordinated packs. Weak alone, but will encircle you. <br><b>Threat Level:</b> Drains 1 Vitality.</p>
+                </div>
+                <div class="codex-entry">
+                    <div class="stalker" style="position: relative; margin: 0 auto;"></div>
+                    <h4 style="color: #a855f7;">The Phantom</h4>
+                    <p>Erratic, deep-diving movement. Capable of sudden flanking maneuvers. <br><b>Threat Level:</b> Drains 1 Vitality.</p>
+                </div>
+                <div class="codex-entry">
+                    <div class="sentinel" style="position: relative; margin: 0 auto;"></div>
+                    <h4 style="color: #f59e0b;">The Warden</h4>
+                    <p>Heavily armored territorial defender. Patrols a strict choke point. <br><b>Threat Level:</b> Lethal on contact.</p>
+                </div>
+                <div class="codex-entry">
+                    <div class="stasis" style="position: relative; margin: 0 auto;"></div>
+                    <h4 style="color: #3b82f6;">Temporal Stasis</h4>
+                    <p>Press 'E' to shatter the AI event loop, freezing all entities for 3 turns. You can maneuver, but kinetic collisions still drain Vitality.</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; text-align: left; padding: 15px; background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444;">
+                <h4 style="color: #ef4444; margin: 0 0 5px 0;">[WARNING]: Bayesian Traps</h4>
+                <p style="margin: 0; font-size: 0.85em; color: #e5e7eb;">Deeper floors contain invisible grid hazards. Monitor your Threat Radar. A high percentage indicates you are adjacent to a hidden trap.</p>
+            </div>
+
+            <button id="close-codex-btn" style="margin-top: 25px; background: #1f2937; color: #fff; border: 1px solid #06b6d4; padding: 10px 20px; cursor: pointer; width: 100%;">Acknowledge & Close</button>
+        </div>
+    </div>
+    
+    <script src="levels.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
