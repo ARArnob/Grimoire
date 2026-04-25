@@ -992,6 +992,7 @@ class GrimoireEngine {
     }
 
     // --- NEW: Ledger Update Function ---
+    // --- NEW: Ledger Update Function ---
     updateAbyssLedger() {
         const ledger = document.getElementById('abyss-ledger');
         const list = document.getElementById('ledger-list');
@@ -1007,7 +1008,12 @@ class GrimoireEngine {
             li.style.display = 'flex';
             li.style.justifyContent = 'space-between';
             li.style.marginBottom = '6px';
-            li.innerHTML = `<span>${GRIMOIRE_LEVELS[key].title}</span> <span>${this.formatTime(timeMs)}</span>`;
+            
+            // Regex to strip "Floor [number]: " from the beginning of the string
+            let rawTitle = GRIMOIRE_LEVELS[key].title;
+            let cleanTitle = rawTitle.replace(/^Floor \d+:\s*/, '');
+            
+            li.innerHTML = `<span>${cleanTitle}</span> <span>${this.formatTime(timeMs)}</span>`;
             list.appendChild(li);
         }
         
