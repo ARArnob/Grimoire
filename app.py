@@ -667,8 +667,8 @@ def genetic_algorithm():
         if best_score == len(target_cipher):
             break
             
-        # 3. Selection & Crossover (Elitism)
-        next_gen = population[:10] # Keep top 10 fittest chromosomes
+        # 3. Selection & Crossover
+        next_gen = population[:10] # Keep top 10 fittest
         while len(next_gen) < pop_size:
             p1, p2 = random.choices(population[:20], k=2)
             split = random.randint(1, len(target_cipher)-1)
